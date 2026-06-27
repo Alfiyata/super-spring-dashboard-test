@@ -3,10 +3,12 @@ withDefaults(
   defineProps<{
     type?: "button" | "submit" | "reset";
     fullWidth?: boolean;
+    disabled?: boolean;
   }>(),
   {
     type: "button",
     fullWidth: false,
+    disabled: false,
   },
 );
 </script>
@@ -16,6 +18,7 @@ withDefaults(
     class="app-button"
     :class="{ 'app-button--full': fullWidth }"
     :type="type"
+    :disabled="disabled"
   >
     <slot />
   </button>

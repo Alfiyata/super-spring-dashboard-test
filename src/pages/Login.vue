@@ -1,6 +1,27 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth.store";
+
 import Button from "@/components/atoms/Button.vue";
 import Input from "@/components/atoms/Input.vue";
+
+const auth = useAuthStore();
+const router = useRouter();
+
+const username = ref("");
+const password = ref("");
+
+const submit = async () => {
+
+  // console.log('Email', email.value, 'Password', password.value)
+  await auth.loginUser({
+    username: username.value,
+    password: password.value,
+  });
+
+  router.push("/");
+};
 </script>
 
 <template>
@@ -9,10 +30,10 @@ import Input from "@/components/atoms/Input.vue";
       <h1>Login to <span class="title">GPS.ID TMS </span>Account</h1>
       <p>Please enter your email and password to continue</p>
 
-      <form class="login-form">
+      <form class="login-form" @submit.prevent="submit">
         <label>
           Email address:
-          <Input type="email" placeholder="Email" required />
+          <Input v-model="username" type="email" placeholder="esteban_schiller@gmail.com" required />
         </label>
 
         <label>
@@ -20,7 +41,7 @@ import Input from "@/components/atoms/Input.vue";
             Password:
             <a href="#" class="forgot-password">Forget Password?</a>
           </span>
-          <Input type="password" placeholder="Password" required />
+          <Input v-model="password" type="password" placeholder="**********" required />
         </label>
 
         <label class="remember-password">
@@ -28,8 +49,10 @@ import Input from "@/components/atoms/Input.vue";
           Remember Password
         </label>
 
-        <Button class="sign-in-button" type="submit">
-          Sign In
+        <p v-if="auth.error" class="error-message">{{ auth.error }}</p>
+
+        <Button class="sign-in-button" type="submit" :disabled="auth.isLoading">
+          {{ auth.isLoading ? "Signing In..." : "Sign In" }}
         </Button>
         <p>Don’t have an account? <span class="title">Create Account</span></p>
       </form>
@@ -120,14 +143,47 @@ import Input from "@/components/atoms/Input.vue";
 }
 
 .remember-password input {
+  appearance: none;
+  display: grid;
+  place-content: center;
   width: 16px;
   height: 16px;
-  accent-color: var(--color-primary);
+  margin: 0;
+  border: 1px solid #202224;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.remember-password input::before {
+  content: "";
+  width: 2px;
+  height: 6px;
+  border: solid #656565;
+  border-width: 0 1px 1px 0;
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.remember-password input:checked {
+  border-color: #656565;
+  background-color: transparent;
+}
+
+.remember-password input:checked::before {
+  opacity: 1;
 }
 
 .sign-in-button {
   align-self: center;
   width: min(90%, 418px);
+}
+
+.error-message {
+  margin: 0 !important;
+  color: #f01616 !important;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .title {

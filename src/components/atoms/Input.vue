@@ -40,6 +40,7 @@ const emit = defineEmits<{
   border-radius: 8px;
   padding: 12px 14px;
   outline: none;
+  background-color: #F1F4F9;
 }
 
 .app-input:focus {

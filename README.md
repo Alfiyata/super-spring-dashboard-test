@@ -18,7 +18,7 @@ npm install
 Buat file `.env.local` di root project, lalu isi:
 
 ```env
-SUPER_SPRING_API_URL=https://dev-portal.gps.id/backend/seen/public
+VITE_SUPER_SPRING_API_URL=https://dev-portal.gps.id/backend/seen/public
 ```
 
 ## Menjalankan Project
