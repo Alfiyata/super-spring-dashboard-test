@@ -1,5 +1,67 @@
-# Vue 3 + TypeScript + Vite
+# Super Spring Test
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Project frontend menggunakan Vue 3, TypeScript, Vite, Pinia, Vue Router, dan Axios.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Requirement
+
+- Node.js 20 atau lebih baru
+- npm
+
+## Install Dependency
+
+```bash
+npm install
+```
+
+## Environment
+
+Buat file `.env.local` di root project, lalu isi:
+
+```env
+SUPER_SPRING_API_URL=https://dev-portal.gps.id/backend/seen/public
+```
+
+## Menjalankan Project
+
+```bash
+npm run dev
+```
+
+Setelah server berjalan, buka URL yang muncul di terminal. Biasanya:
+
+```text
+http://localhost:5173/
+```
+
+## Build Production
+
+```bash
+npm run build
+```
+
+Hasil build akan dibuat di folder `dist`.
+
+## Preview Build
+
+```bash
+npm run preview
+```
+
+## Struktur Singkat
+
+```text
+src/
+  api/          konfigurasi axios dan request API
+  assets/       asset aplikasi
+  components/   komponen reusable
+  pages/        halaman aplikasi
+  router/       konfigurasi route
+  stores/       state management Pinia
+  style.css     global style dan CSS variable
+```
+
+## Script
+
+- `npm run dev` menjalankan development server
+- `npm run build` build aplikasi untuk production
+- `npm run preview` preview hasil build
