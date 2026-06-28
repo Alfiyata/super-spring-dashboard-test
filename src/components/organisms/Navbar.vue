@@ -10,6 +10,9 @@ import ArrowDown from "@/assets/icon/Arrow-down.svg";
 import ArrowDownCircle from "@/assets/icon/Arrow-circle.svg";
 
 const auth = useAuthStore();
+const emit = defineEmits<{
+  toggleSidebar: [];
+}>();
 </script>
 
 <template>
@@ -17,8 +20,15 @@ const auth = useAuthStore();
     <Card>
       <div class="navbar-grid">
         <div class="navbar-left">
-          <img :src="IconBurger" class="button-icon" alt="Button Icon Burger">
-          <Input class="input-search" placeholder="Search" />
+          <button
+            class="navbar-menu-button"
+            type="button"
+            aria-label="Open sidebar menu"
+            @click="emit('toggleSidebar')"
+          >
+            <img :src="IconBurger" class="button-icon" alt="">
+          </button>
+          <Input class="input-search" icon="search" placeholder="Search" />
         </div>
 
         <div class="navbar-right">
@@ -85,6 +95,22 @@ const auth = useAuthStore();
 .button-icon {
   flex: 0 0 auto;
   cursor: pointer;
+}
+
+.navbar-menu-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .navbar-menu-button {
+    display: inline-flex;
+  }
 }
 
 .language-select,
@@ -157,6 +183,9 @@ const auth = useAuthStore();
 
 .input-search {
   min-width: 0;
+}
+
+.input-search :deep(.app-input) {
   border-radius: 20px;
 }
 

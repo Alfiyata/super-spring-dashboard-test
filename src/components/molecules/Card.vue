@@ -46,7 +46,6 @@ withDefaults(
 <style scoped>
 .app-card {
   width: 100%;
-  border-radius: 8px;
   background-color: #ffffff;
 }
 

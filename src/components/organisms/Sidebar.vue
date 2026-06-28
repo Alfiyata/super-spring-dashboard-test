@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth.store";
 import DashboardIcon from "@/assets/icon/Dashboard-icon.svg";
@@ -18,6 +19,21 @@ interface SidebarItem {
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
+withDefaults(
+  defineProps<{
+    mobileOpen?: boolean;
+  }>(),
+  {
+    mobileOpen: false,
+  },
+);
+
+const emit = defineEmits<{
+  collapseChange: [value: boolean];
+  closeMobile: [];
+}>();
+
+const isCollapsed = ref(false);
 
 const mainMenu: SidebarItem[] = [
   { label: "Dashboard", icon: DashboardIcon, to: "/dashboard" },
@@ -40,13 +56,29 @@ const bottomMenu: SidebarItem[] = [
 const isActive = (item: SidebarItem) => {
   return item.to ? route.path === item.to : false;
 };
+
+const toggleSidebar = () => {
+  isCollapsed.value = !isCollapsed.value;
+  emit("collapseChange", isCollapsed.value);
+};
 </script>
 
 <template>
-  <aside class="sidebar">
+  <aside
+    class="sidebar"
+    :class="{
+      'sidebar-collapsed': isCollapsed,
+      'sidebar-mobile-open': mobileOpen,
+    }"
+  >
     <div class="sidebar_logo">
       <span class="sidebar_logo-text">GPS.ID TMS</span>
-      <button class="sidebar_menu-button" type="button" aria-label="Toggle sidebar menu">
+      <button
+        class="sidebar_menu-button"
+        type="button"
+        aria-label="Toggle sidebar menu"
+        @click="toggleSidebar"
+      >
         <img :src="HamburgerIcon" class="sidebar_menu-icon" alt="">
       </button>
     </div>
@@ -58,11 +90,12 @@ const isActive = (item: SidebarItem) => {
         class="sidebar_item"
         :class="{ 'sidebar_item-active': isActive(item) }"
         :to="item.to ?? '#'"
+        @click="emit('closeMobile')"
       >
         <span class="sidebar_icon" aria-hidden="true">
           <img :src="item.icon" :alt="`${item.label} icon`">
         </span>
-        <span>{{ item.label }}</span>
+        <span class="sidebar_label">{{ item.label }}</span>
       </RouterLink>
     </nav>
 
@@ -72,12 +105,12 @@ const isActive = (item: SidebarItem) => {
         :key="item.label"
         class="sidebar_item sidebar_button"
         type="button"
-        @click="item.action?.()"
+        @click="emit('closeMobile'); item.action?.()"
       >
         <span class="sidebar_icon" aria-hidden="true">
           <img :src="item.icon" :alt="`${item.label} icon`">
         </span>
-        <span>{{ item.label }}</span>
+        <span class="sidebar_label">{{ item.label }}</span>
       </button>
     </nav>
   </aside>
@@ -95,6 +128,12 @@ const isActive = (item: SidebarItem) => {
   border-right: 1px solid #e5e7eb;
   background-color: #ffffff;
   z-index: 20;
+  transition: width 160ms ease, padding 160ms ease;
+}
+
+.sidebar-collapsed {
+  width: 76px;
+  padding-inline: 10px;
 }
 
 .sidebar_logo {
@@ -130,6 +169,20 @@ const isActive = (item: SidebarItem) => {
   width: 18px;
   height: 18px;
   object-fit: contain;
+}
+
+.sidebar-collapsed .sidebar_logo {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.sidebar-collapsed .sidebar_logo-text,
+.sidebar-collapsed .sidebar_label {
+  display: none;
+}
+
+.sidebar-collapsed .sidebar_menu-button {
+  position: static;
 }
 
 .sidebar_nav {
@@ -211,29 +264,40 @@ const isActive = (item: SidebarItem) => {
 
 @media (max-width: 900px) {
   .sidebar {
-    position: static;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    padding: 16px;
-    border-right: 0;
-    border-bottom: 1px solid #e5e7eb;
+    display: none;
+    width: 260px;
+    padding: 24px 16px;
   }
 
-  .sidebar_nav,
-  .sidebar_nav-bottom {
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    overflow-x: auto;
+  .sidebar-mobile-open {
+    display: flex;
   }
 
-  .sidebar_nav:not(.sidebar_nav-bottom) {
-    overflow-y: visible;
-    padding-right: 0;
+  .sidebar-mobile-open .sidebar_logo-text,
+  .sidebar-mobile-open .sidebar_label {
+    display: inline;
   }
 
-  .sidebar_nav-bottom {
-    margin-top: 12px;
+  .sidebar-mobile-open .sidebar_menu-button {
+    position: absolute;
   }
+
+  .sidebar-mobile-open .sidebar_item {
+    justify-content: flex-start;
+    padding: 10px 12px;
+  }
+
+  .sidebar_item-active::before {
+    display: none;
+  }
+}
+
+.sidebar-collapsed .sidebar_item {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.sidebar-collapsed .sidebar_item-active::before {
+  left: -10px;
 }
 </style>

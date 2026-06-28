@@ -82,7 +82,6 @@ const submit = async () => {
   align-items: center;
   justify-content: center;
   border: 0.3px solid #e5e7eb;
-  border-radius: 24px;
   background-color: #ffffff;
   opacity: 1;
 }
