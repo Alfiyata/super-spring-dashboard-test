@@ -6,10 +6,17 @@ interface LoginPayload {
   password: string;
 }
 
+interface AuthUser {
+  username: string;
+  fullname: string;
+  email: string;
+  phone: string;
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    token: localStorage.getItem("token"),
-    user: null as any,
+    token: localStorage.getItem("token") as string | null,
+    user: null as AuthUser | null,
     isLoading: false,
     error: null as string | null,
   }),
@@ -24,10 +31,17 @@ export const useAuthStore = defineStore("auth", {
       this.error = null;
 
       try {
-        const data = await login(payload);
+        const response = await login(payload);
+        const data = response.message.data;
 
         this.token = data.token;
-        this.user = data.user ?? null;
+        this.user = {
+          username: data.username,
+          fullname: data.fullname,
+          email: data.email,
+          phone: data.phone,
+        };
+        
         localStorage.setItem("token", data.token);
 
         return data;

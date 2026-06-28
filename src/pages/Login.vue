@@ -14,13 +14,12 @@ const password = ref("");
 
 const submit = async () => {
 
-  // console.log('Email', email.value, 'Password', password.value)
   await auth.loginUser({
     username: username.value,
     password: password.value,
   });
 
-  router.push("/");
+  router.push("/dashboard");
 };
 </script>
 
@@ -33,7 +32,7 @@ const submit = async () => {
       <form class="login-form" @submit.prevent="submit">
         <label>
           Email address:
-          <Input v-model="username" type="email" placeholder="esteban_schiller@gmail.com" required />
+          <Input v-model="username" type="text" placeholder="esteban_schiller@gmail.com" required />
         </label>
 
         <label>

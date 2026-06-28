@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import Login from "@/pages/Login.vue";
 import Dashboard from "@/pages/Dashboard.vue";
+import Job from "@/pages/Job.vue";
+import Vehicle from "@/pages/Vehicle.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -12,10 +15,22 @@ const router = createRouter({
     },
     {
       path: "/",
-      component: Dashboard,
-      meta: {
-        requiresAuth: true,
-      },
+      component: DashboardLayout,
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: "dashboard",
+          component: Dashboard,
+        },
+        {
+          path: "job",
+          component: Job,
+        },
+        {
+          path: "vehicle",
+          component: Vehicle,
+        },
+      ],
     },
   ],
 });
@@ -28,7 +43,7 @@ router.beforeEach((to) => {
   }
 
   if (to.path === "/login" && token) {
-    return "/";
+    return "/dashboard";
   }
 });
 
