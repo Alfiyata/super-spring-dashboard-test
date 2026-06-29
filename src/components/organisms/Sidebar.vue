@@ -280,6 +280,7 @@ const toggleSidebar = () => {
 
   .sidebar-mobile-open .sidebar_menu-button {
     position: absolute;
+      display: none;
   }
 
   .sidebar-mobile-open .sidebar_item {

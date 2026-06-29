@@ -98,7 +98,7 @@ const emit = defineEmits<{
 }
 
 .navbar-menu-button {
-  display: none;
+  /* display: none; */
   align-items: center;
   justify-content: center;
   border: 0;
